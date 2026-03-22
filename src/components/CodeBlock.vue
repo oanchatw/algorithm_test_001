@@ -12,24 +12,24 @@
     <div class="code-content">
       <pre v-for="lang in langs" v-show="activeTab === lang" :key="lang"><code
         :ref="el => { if (el) codeRefs[lang] = el }"
-        :class="'language-' + (lang === 'dart' ? 'javascript' : lang)"
+        :class="'language-' + lang"
       >{{ solutions[lang] }}</code></pre>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch, nextTick } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
 import hljs from 'highlight.js/lib/core'
 import kotlin from 'highlight.js/lib/languages/kotlin'
+import dart from 'highlight.js/lib/languages/dart'
 import swift from 'highlight.js/lib/languages/swift'
 import haskell from 'highlight.js/lib/languages/haskell'
-import javascript from 'highlight.js/lib/languages/javascript'
 
 hljs.registerLanguage('kotlin', kotlin)
+hljs.registerLanguage('dart', dart)
 hljs.registerLanguage('swift', swift)
 hljs.registerLanguage('haskell', haskell)
-hljs.registerLanguage('javascript', javascript)
 
 const props = defineProps({ solutions: Object })
 
@@ -47,9 +47,4 @@ const highlight = async () => {
 }
 
 onMounted(highlight)
-watch(activeTab, () => {
-  const el = codeRefs.value[activeTab.value]
-  if (el) delete el.dataset.highlighted
-  highlight()
-})
 </script>
